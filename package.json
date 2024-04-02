@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "deploy": "nuxt generate && gh-pages -d dist --dotfiles",
+    "deploy": "nuxt generate && gh-pages -d dist",
     "predeploy": "rm -rf dist"
   },
   "dependencies": {
