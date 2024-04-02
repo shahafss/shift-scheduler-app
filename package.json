@@ -7,7 +7,9 @@
     "dev": "PORT=8080 nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy": "nuxt generate && gh-pages -d dist",
+    "predeploy": "rm -rf dist"
   },
   "dependencies": {
     "@emotion/css": "^11.11.2",
@@ -24,6 +26,7 @@
     "@vue/compiler-sfc": "^3.4.21",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
+    "gh-pages": "^6.1.1",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
