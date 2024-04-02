@@ -5,7 +5,8 @@ export default defineNuxtConfig({
   experimental: {
     payloadExtraction: true,
   },
+  target: "static",
   router: {
-    base: "/shift-scheduler-app/", // Replace with your details
+    base: "/shift-scheduler-app/",
   },
 });
