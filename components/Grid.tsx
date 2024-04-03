@@ -1,13 +1,19 @@
 import { defineComponent } from "vue"
-import { css } from "@emotion/css"
+import { css, cx } from "@emotion/css"
 import type { Employee } from "./EmplyeesListView"
 import { CellItem } from "./CellItem"
+
+type GridSize = "s" | "m" | "l"
 
 export const Grid = defineComponent({
   name: "ShiftsGrid",
   props: {
     selectedEmployee: {
       type: Object as PropType<Employee | null>,
+      required: true,
+    },
+    size: {
+      type: String as PropType<GridSize>,
       required: true,
     },
   },
@@ -20,7 +26,6 @@ export const Grid = defineComponent({
       const cellId = `cell-${dayIndex}-${cellIndex}`
       if (!cellEmployeeMap.value.has(cellId)) {
         cellEmployeeMap.value.set(cellId, props.selectedEmployee)
-        console.log(cellEmployeeMap.value)
       } else {
         cellEmployeeMap.value.delete(cellId)
       }
@@ -48,11 +53,13 @@ export const Grid = defineComponent({
 
       return days.map((day, dayIndex) => (
         <div class={column}>
-          <h2 class={columnTitle}>{day}</h2>
+          <div class={cx(gridCellStyle, css({ borderTop: 0 }))}>
+            <div class={columnTitle}>{day}</div>
+          </div>
           {[1, 2, 3].map((_, cellIndex) => (
             <div
               onClick={() => handleCellClick(dayIndex, cellIndex)}
-              class={[row]}
+              class={gridCellStyle}
             >
               {renderCellItems(dayIndex, cellIndex)}
             </div>
@@ -62,14 +69,22 @@ export const Grid = defineComponent({
     }
 
     return () => (
-      <div id="container" class={gridContainer}>
+      <div
+        class={
+          props.size === "l" || props.size === "m"
+            ? gridContainer
+            : gridContainerSmall
+        }
+      >
         {renderDays()}
-        <div class={column}>
-          <h2 class={columnTitle}>משמרת</h2>
-          <div class={row}>בוקר</div>
-          <div class={row}>צהריים</div>
-          <div class={row}>ערב</div>
-        </div>
+        {props.size === "l" && (
+          <div class={column}>
+            <div class={cx(gridCellStyle, css({ borderTop: 0 }))}>משמרת</div>
+            <div class={gridCellStyle}>בוקר</div>
+            <div class={gridCellStyle}>צהריים</div>
+            <div class={gridCellStyle}>ערב</div>
+          </div>
+        )}
       </div>
     )
   },
@@ -78,6 +93,14 @@ export const Grid = defineComponent({
 const gridContainer = css({
   display: "grid",
   gridTemplateColumns: "repeat(8, 1fr)",
+  gap: "5px",
+  height: "fit-content",
+})
+
+const gridContainerSmall = css({
+  scale: "0.7",
+  display: "grid",
+  gridTemplateColumns: "repeat(7, 1fr)",
   gap: "1px",
   height: "fit-content",
 })
@@ -88,15 +111,18 @@ const columnTitle = css({
 
 const column = css({
   border: "1px solid black",
-  padding: "10px",
+  padding: "0 10px",
   textAlign: "center",
 })
 
-const row = css({
+const gridCellStyle = css({
   height: "2rem",
   borderTop: "3px solid black",
   padding: "5px",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  minWidth: "3rem",
 })
+
+// const gridCellSmallStyle = css({})

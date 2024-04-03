@@ -1,5 +1,6 @@
 import { css } from "@emotion/css"
 import type { Employee } from "./EmplyeesListView"
+import { useScreenSize } from "./composables/useScreenSize"
 
 export const EmployeeListItem = defineComponent({
   name: "EmployeeListItem",
@@ -14,11 +15,16 @@ export const EmployeeListItem = defineComponent({
   },
   setup(props) {
     return () => {
+      const { isSsize } = useScreenSize()
       const { isSelected, employee, onClick, onDeleteClick } = props
 
       return (
         <div
-          class={[employeeStyle, isSelected && employeeSelectedStyle]}
+          class={[
+            employeeStyle,
+            isSelected && employeeSelectedStyle,
+            !isSsize.value && hoverStyle,
+          ]}
           onClick={() => onClick(employee)}
         >
           {isSelected && (
@@ -46,6 +52,9 @@ const employeeStyle = css({
   borderRadius: "0.25rem",
   userSelect: "none",
   transition: "all ease 0.3s",
+})
+
+const hoverStyle = css({
   ":hover": { transform: "scale(1.1)" },
 })
 

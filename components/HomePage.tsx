@@ -2,6 +2,7 @@ import { defineComponent } from "vue"
 import { css } from "@emotion/css"
 import { Grid } from "./Grid"
 import { EmployeesListView, type Employee } from "./EmplyeesListView"
+import { useScreenSize } from "./composables/useScreenSize"
 
 export const HomePage = defineComponent({
   name: "HomePage",
@@ -15,25 +16,39 @@ export const HomePage = defineComponent({
       }
     }
 
-    return () => (
-      <div class={style}>
-        <div style={{ width: "100%" }}>
-          <Grid selectedEmployee={selectedEmployee.value} />
-          <div style={{ marginTop: "1rem" }}>
-            <EmployeesListView
+    return () => {
+      const { isSsize, isMsize } = useScreenSize()
+
+      return (
+        <div class={containerStyle}>
+          <div class={contentStyle}>
+            <Grid
               selectedEmployee={selectedEmployee.value}
-              onUpdateSelectedEmployee={handleSelectedEmployeeUpdate}
+              size={isSsize.value ? "s" : isMsize.value ? "m" : "l"}
             />
+            <div style={{ marginTop: "1rem" }}>
+              <EmployeesListView
+                selectedEmployee={selectedEmployee.value}
+                onUpdateSelectedEmployee={handleSelectedEmployeeUpdate}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   },
 })
 
-const style = css({
+const containerStyle = css({
   width: "100%",
-  height: "100vh",
+  height: "100dvh",
   backgroundColor: "wheat",
   display: "flex",
+})
+
+const contentStyle = css({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
 })

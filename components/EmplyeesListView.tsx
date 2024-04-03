@@ -43,6 +43,7 @@ export const EmployeesListView = defineComponent({
         color: generateRandomSoftRGBA(),
       })
       showInput.value = false
+      inputValue.value = undefined
     }
 
     function generateRandomSoftRGBA(): string {
