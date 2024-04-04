@@ -11,5 +11,6 @@ import { HomePage } from "@/components/HomePage"
 <style>
 body {
   margin: 0;
+  background-color: wheat;
 }
 </style>

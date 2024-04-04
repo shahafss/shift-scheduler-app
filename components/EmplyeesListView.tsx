@@ -94,10 +94,10 @@ export const EmployeesListView = defineComponent({
     }
 
     return () => (
-      <div class={container}>
+      <div class={containerStyle}>
         <div class={[employeeListStyle, shadowStyle]}>
-          <div class={title}>
-            <span class={titleText}>עובדים</span>
+          <div class={titleStyle}>
+            <span class={titleTextStyle}>עובדים</span>
           </div>
           <div style={{ padding: "2px" }}>
             {employees.value.map((employee) => (
@@ -134,7 +134,7 @@ export const EmployeesListView = defineComponent({
   },
 })
 
-const container = css({
+const containerStyle = css({
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
@@ -150,15 +150,15 @@ const employeeListStyle = css({
   paddingBottom: "8px",
 })
 
-const title = css({
-  backgroundColor: "blueviolet",
+const titleStyle = css({
+  backgroundColor: "cornflowerblue",
   borderTopLeftRadius: "0.5rem",
   borderTopRightRadius: "0.5rem",
   display: "flex",
   justifyContent: "space-between",
 })
 
-const titleText = css({
+const titleTextStyle = css({
   width: "100%",
   color: "white",
   textAlign: "center",

@@ -70,9 +70,7 @@ export const Grid = defineComponent({
     return () => (
       <div
         class={
-          props.size === "l" || props.size === "m"
-            ? gridContainer
-            : gridContainerSmall
+          props.size === "l" ? gridContainerStyle : gridContainerSmallStyle
         }
       >
         {renderDays()}
@@ -89,20 +87,36 @@ export const Grid = defineComponent({
   },
 })
 
-const gridContainer = css({
+const gridContainerBaseStyle = css({
+  gap: "1px",
+  boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.3)",
+  borderRadius: "1rem",
+  marginTop: "1rem",
   display: "grid",
-  gridTemplateColumns: "repeat(8, 1fr)",
-  gap: "5px",
-  height: "fit-content",
+  "& > div:first-child": {
+    borderTopLeftRadius: "1rem",
+    borderBottomLeftRadius: "1rem",
+  },
+  "& > div:nth-last-child(1)": {
+    borderTopRightRadius: "1rem",
+    borderBottomRightRadius: "1rem",
+  },
 })
 
-const gridContainerSmall = css({
-  scale: "0.7",
-  display: "grid",
-  gridTemplateColumns: "repeat(7, 1fr)",
-  gap: "1px",
-  height: "fit-content",
-})
+const gridContainerStyle = cx(
+  gridContainerBaseStyle,
+  css({
+    width: "95%",
+    gridTemplateColumns: "repeat(8, 1fr)",
+  })
+)
+
+const gridContainerSmallStyle = cx(
+  gridContainerBaseStyle,
+  css({
+    gridTemplateColumns: "repeat(7, minmax(3rem, 1fr))",
+  })
+)
 
 const columnTitle = css({
   marginTop: 0,
@@ -110,6 +124,7 @@ const columnTitle = css({
 
 const column = css({
   border: "1px solid black",
+  backgroundColor: "lightsteelblue",
   padding: "0 10px",
   textAlign: "center",
 })
@@ -121,7 +136,4 @@ const gridCellStyle = css({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  minWidth: "3rem",
 })
-
-// const gridCellSmallStyle = css({})

@@ -16,33 +16,28 @@ export const HomePage = defineComponent({
       }
     }
 
-    return () => {
-      const { isSsize, isMsize } = useScreenSize()
+    const { isMsize, isSsize } = useScreenSize()
 
-      return (
-        <div class={containerStyle}>
-          <div class={contentStyle}>
-            <Grid
+    return () => (
+      <div class={containerStyle}>
+        <div class={contentStyle}>
+          <Grid
+            selectedEmployee={selectedEmployee.value}
+            size={isSsize.value ? "s" : isMsize.value ? "m" : "l"}
+          />
+          <div style={{ marginTop: "1rem" }}>
+            <EmployeesListView
               selectedEmployee={selectedEmployee.value}
-              size={isSsize.value ? "s" : isMsize.value ? "m" : "l"}
+              onUpdateSelectedEmployee={handleSelectedEmployeeUpdate}
             />
-            <div style={{ marginTop: "1rem" }}>
-              <EmployeesListView
-                selectedEmployee={selectedEmployee.value}
-                onUpdateSelectedEmployee={handleSelectedEmployeeUpdate}
-              />
-            </div>
           </div>
         </div>
-      )
-    }
+      </div>
+    )
   },
 })
 
 const containerStyle = css({
-  width: "100%",
-  height: "100dvh",
-  backgroundColor: "wheat",
   display: "flex",
 })
 

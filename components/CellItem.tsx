@@ -9,14 +9,14 @@ export const CellItem = defineComponent({
   },
   setup(props) {
     return () => (
-      <div class={cellStyle(props.employee.color)}>
+      <div class={cellItemStyle(props.employee.color)}>
         {props.employee && props.employee.name}
       </div>
     )
   },
 })
 
-const cellStyle = (color: string) =>
+const cellItemStyle = (color: string) =>
   css({
     display: "flex",
     justifyContent: "center",

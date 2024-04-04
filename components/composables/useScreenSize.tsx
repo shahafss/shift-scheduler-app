@@ -1,28 +1,26 @@
-import { useWindowSize } from "@vueuse/core"
-import { ref } from "vue"
+import { ref, onMounted, onBeforeUnmount } from "vue"
+import { debounce } from "lodash"
 
 export function useScreenSize() {
-  const { width } = useWindowSize()
+  const isSsize = ref(false)
+  const isMsize = ref(false)
+  const isLsize = ref(false)
 
-  const breakpoint = {
-    small: 414,
-    medium: 640,
-  }
+  const handleResize = debounce(() => {
+    const width = window.innerWidth
+    isSsize.value = width < 600
+    isMsize.value = width >= 600 && width < 1024
+    isLsize.value = width >= 1024
+  }, 200)
 
-  const isSsize = ref(width.value <= breakpoint.small)
-  const isMsize = ref(
-    width.value <= breakpoint.medium && width.value > breakpoint.small
-  )
+  onMounted(() => {
+    handleResize()
+    window.addEventListener("resize", handleResize)
+  })
 
-  watch(
-    width,
-    () => {
-      isSsize.value = width.value <= breakpoint.small
-      isMsize.value =
-        width.value <= breakpoint.medium && width.value > breakpoint.small
-    },
-    { immediate: true }
-  )
+  onBeforeUnmount(() => {
+    window.removeEventListener("resize", handleResize)
+  })
 
-  return { isSsize, isMsize }
+  return { isSsize, isMsize, isLsize }
 }
