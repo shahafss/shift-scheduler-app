@@ -9,8 +9,7 @@ export const Grid = defineComponent({
   name: "ShiftsGrid",
   props: {
     selectedEmployee: {
-      type: Object as PropType<Employee | null>,
-      required: true,
+      type: Object as PropType<Employee>,
     },
     size: {
       type: String as PropType<GridSize>,

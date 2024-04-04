@@ -7,10 +7,10 @@ import { useScreenSize } from "./composables/useScreenSize"
 export const HomePage = defineComponent({
   name: "HomePage",
   setup() {
-    const selectedEmployee = ref<Employee | null>(null)
-    const handleSelectedEmployeeUpdate = (employee: Employee | null) => {
+    const selectedEmployee = ref<Employee>()
+    const handleSelectedEmployeeUpdate = (employee?: Employee) => {
       if (selectedEmployee.value?.id === employee?.id) {
-        selectedEmployee.value = null
+        selectedEmployee.value = undefined
       } else {
         selectedEmployee.value = employee
       }

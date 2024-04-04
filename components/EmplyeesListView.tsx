@@ -2,6 +2,7 @@ import { defineComponent } from "vue"
 import { css, cx } from "@emotion/css"
 import { EmployeeListItem } from "./EmployeeListItem"
 import { v4 as uuidv4 } from "uuid"
+import { useLocalStorage, whenever } from "@vueuse/core"
 
 export interface Employee {
   id: string
@@ -14,19 +15,26 @@ export const EmployeesListView = defineComponent({
   name: "EmployeesListView",
   props: {
     selectedEmployee: {
-      type: Object as PropType<Employee | null>,
-      required: true,
+      type: Object as PropType<Employee>,
     },
     onUpdateSelectedEmployee: {
-      type: Function as PropType<(employee: Employee | null) => void>,
-      required: true,
+      type: Function as PropType<(employee?: Employee) => void>,
     },
   },
   setup(props) {
     const inputValue = ref<string>()
     const showInput = ref(false)
-
     const employees = ref<Employee[]>([])
+
+    const employeesLocalStorage = useLocalStorage("employees", employees)
+
+    whenever(
+      employeesLocalStorage,
+      () => {
+        employees.value = employeesLocalStorage.value
+      },
+      { immediate: true }
+    )
 
     const onAddEmployeeClick = () => {
       if (!showInput.value) {
@@ -42,8 +50,10 @@ export const EmployeesListView = defineComponent({
         selected: false,
         color: generateRandomSoftRGBA(),
       })
+
       showInput.value = false
       inputValue.value = undefined
+      updateLocalStorage()
     }
 
     function generateRandomSoftRGBA(): string {
@@ -65,7 +75,7 @@ export const EmployeesListView = defineComponent({
     }
 
     const onEmployeeClick = (employee: Employee) => {
-      props.onUpdateSelectedEmployee(employee)
+      props.onUpdateSelectedEmployee?.(employee)
       showInput.value = false
     }
 
@@ -73,50 +83,51 @@ export const EmployeesListView = defineComponent({
       const index = employees.value.findIndex(
         (employee) => employee.id === props.selectedEmployee?.id
       )
+
       employees.value.splice(index, 1)
-      props.onUpdateSelectedEmployee(null)
+      props.onUpdateSelectedEmployee?.()
+      updateLocalStorage()
+    }
+
+    const updateLocalStorage = () => {
+      employeesLocalStorage.value = employees.value
     }
 
     return () => (
-      <div>
-        <div class={container}>
-          <div class={[employeeListStyle, shadowStyle]}>
-            <div class={title}>
-              <span class={titleText}>עובדים</span>
-            </div>
-            <div style={{ padding: "2px" }}>
-              {employees.value.map((employee) => (
-                <EmployeeListItem
-                  employee={employee}
-                  onClick={onEmployeeClick}
-                  onDeleteClick={onDeleteEmployeeClick}
-                  isSelected={employee.id === props.selectedEmployee?.id}
-                />
-              ))}
-            </div>
+      <div class={container}>
+        <div class={[employeeListStyle, shadowStyle]}>
+          <div class={title}>
+            <span class={titleText}>עובדים</span>
           </div>
-          <div
-            class={shadowStyle}
-            style={{ marginTop: "0.25rem", borderRadius: "0.3rem" }}
-          >
-            {showInput.value && (
-              <input
-                class={inputStyle}
-                onInput={({ target }) =>
-                  (inputValue.value = (target as HTMLInputElement).value)
-                }
+          <div style={{ padding: "2px" }}>
+            {employees.value.map((employee) => (
+              <EmployeeListItem
+                employee={employee}
+                onClick={onEmployeeClick}
+                onDeleteClick={onDeleteEmployeeClick}
+                isSelected={employee.id === props.selectedEmployee?.id}
               />
-            )}
-            <button
-              class={cx(
-                addButtonStyle,
-                showInput.value && inputShownButtonStyle
-              )}
-              onClick={() => onAddEmployeeClick()}
-            >
-              הוסף
-            </button>
+            ))}
           </div>
+        </div>
+        <div
+          class={shadowStyle}
+          style={{ marginTop: "0.25rem", borderRadius: "0.3rem" }}
+        >
+          {showInput.value && (
+            <input
+              class={inputStyle}
+              onInput={({ target }) =>
+                (inputValue.value = (target as HTMLInputElement).value)
+              }
+            />
+          )}
+          <button
+            class={cx(addButtonStyle, showInput.value && inputShownButtonStyle)}
+            onClick={() => onAddEmployeeClick()}
+          >
+            הוסף
+          </button>
         </div>
       </div>
     )
