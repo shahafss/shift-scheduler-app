@@ -1,6 +1,6 @@
 import { defineComponent } from "vue"
 import { css } from "@emotion/css"
-import { Grid } from "./Grid"
+import { Schedule } from "./Schedule"
 import { EmployeesListView, type Employee } from "./EmplyeesListView"
 import { useScreenSize } from "./composables/useScreenSize"
 
@@ -21,7 +21,7 @@ export const HomePage = defineComponent({
     return () => (
       <div class={containerStyle}>
         <div class={contentStyle}>
-          <Grid
+          <Schedule
             selectedEmployee={selectedEmployee.value}
             size={isSsize.value ? "s" : isMsize.value ? "m" : "l"}
           />

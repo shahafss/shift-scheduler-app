@@ -6,7 +6,7 @@ import { useLocalStorage } from "@vueuse/core"
 
 type GridSize = "s" | "m" | "l"
 
-export const Grid = defineComponent({
+export const Schedule = defineComponent({
   name: "ShiftsGrid",
   props: {
     selectedEmployee: {
@@ -73,11 +73,7 @@ export const Grid = defineComponent({
     }
 
     return () => (
-      <div
-        class={
-          props.size === "l" ? gridContainerStyle : gridContainerSmallStyle
-        }
-      >
+      <div class={props.size === "l" ? gridLargeStyle : gridSmallStyle}>
         {renderDays()}
         {props.size === "l" && (
           <div class={column}>
@@ -92,7 +88,7 @@ export const Grid = defineComponent({
   },
 })
 
-const gridContainerBaseStyle = css({
+const gridBaseStyle = css({
   gap: "1px",
   boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.3)",
   borderRadius: "1rem",
@@ -108,16 +104,16 @@ const gridContainerBaseStyle = css({
   },
 })
 
-const gridContainerStyle = cx(
-  gridContainerBaseStyle,
+const gridLargeStyle = cx(
+  gridBaseStyle,
   css({
     width: "95%",
     gridTemplateColumns: "repeat(8, 1fr)",
   })
 )
 
-const gridContainerSmallStyle = cx(
-  gridContainerBaseStyle,
+const gridSmallStyle = cx(
+  gridBaseStyle,
   css({
     gridTemplateColumns: "repeat(7, minmax(3rem, 1fr))",
   })
