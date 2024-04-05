@@ -2,6 +2,7 @@ import { defineComponent } from "vue"
 import { css, cx } from "@emotion/css"
 import type { Employee } from "./EmplyeesListView"
 import { CellItem } from "./CellItem"
+import { useLocalStorage } from "@vueuse/core"
 
 type GridSize = "s" | "m" | "l"
 
@@ -17,12 +18,16 @@ export const Grid = defineComponent({
     },
   },
   setup(props) {
-    const cellEmployeeMap = ref(new Map<string, Employee | null>())
+    const cellEmployeeMap = useLocalStorage(
+      "shiftsGrid",
+      new Map<string, Employee | null>()
+    )
 
     const handleCellClick = (dayIndex: number, cellIndex: number) => {
       if (!props.selectedEmployee) return
 
       const cellId = `cell-${dayIndex}-${cellIndex}`
+
       if (!cellEmployeeMap.value.has(cellId)) {
         cellEmployeeMap.value.set(cellId, props.selectedEmployee)
       } else {
