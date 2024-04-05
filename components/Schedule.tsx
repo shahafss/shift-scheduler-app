@@ -25,11 +25,9 @@ export const Schedule = defineComponent({
     )
 
     const handleCellClick = (dayIndex: number, cellIndex: number) => {
-      if (!props.selectedEmployee) return
-
       const cellId = `cell-${dayIndex}-${cellIndex}`
 
-      if (!cellEmployeeMap.value.has(cellId)) {
+      if (props.selectedEmployee) {
         cellEmployeeMap.value.set(cellId, props.selectedEmployee)
       } else {
         cellEmployeeMap.value.delete(cellId)
