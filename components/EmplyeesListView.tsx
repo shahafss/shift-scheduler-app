@@ -2,7 +2,7 @@ import { defineComponent } from "vue"
 import { css } from "@emotion/css"
 import { EmployeeListItem } from "./EmployeeListItem"
 import { v4 as uuidv4 } from "uuid"
-import { useLocalStorage, whenever } from "@vueuse/core"
+import { useLocalStorage } from "@vueuse/core"
 import { Button } from "./Button"
 
 export interface Employee {
@@ -25,17 +25,7 @@ export const EmployeesListView = defineComponent({
   setup(props) {
     const inputValue = ref<string>()
     const showInput = ref(false)
-    const employees = ref<Employee[]>([])
-
-    const employeesLocalStorage = useLocalStorage("employees", employees)
-
-    whenever(
-      employeesLocalStorage,
-      () => {
-        employees.value = employeesLocalStorage.value
-      },
-      { immediate: true }
-    )
+    const employees = useLocalStorage<Employee[]>("employees", [])
 
     const onAddEmployeeClick = () => {
       if (!showInput.value) {
@@ -54,7 +44,6 @@ export const EmployeesListView = defineComponent({
 
       showInput.value = false
       inputValue.value = undefined
-      updateLocalStorage()
     }
 
     function generateRandomSoftRGBA(): string {
@@ -87,11 +76,6 @@ export const EmployeesListView = defineComponent({
 
       employees.value.splice(index, 1)
       props.onUpdateSelectedEmployee?.()
-      updateLocalStorage()
-    }
-
-    const updateLocalStorage = () => {
-      employeesLocalStorage.value = employees.value
     }
 
     return () => (
