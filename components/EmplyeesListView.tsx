@@ -1,8 +1,9 @@
 import { defineComponent } from "vue"
-import { css, cx } from "@emotion/css"
+import { css } from "@emotion/css"
 import { EmployeeListItem } from "./EmployeeListItem"
 import { v4 as uuidv4 } from "uuid"
 import { useLocalStorage, whenever } from "@vueuse/core"
+import { Button } from "./Button"
 
 export interface Employee {
   id: string
@@ -122,12 +123,12 @@ export const EmployeesListView = defineComponent({
               }
             />
           )}
-          <button
-            class={cx(addButtonStyle, showInput.value && inputShownButtonStyle)}
+          <Button
+            class={showInput.value && inputShownButtonStyle}
             onClick={() => onAddEmployeeClick()}
           >
             הוסף
-          </button>
+          </Button>
         </div>
       </div>
     )
@@ -173,17 +174,6 @@ const inputStyle = css({
 
   ":focus": {
     outline: "none",
-  },
-})
-
-const addButtonStyle = css({
-  border: "1px solid black",
-  borderRadius: "0.3rem",
-  fontWeight: 600,
-  backgroundColor: "lightsteelblue",
-  ":hover": {
-    backgroundColor: "gray",
-    color: "white",
   },
 })
 

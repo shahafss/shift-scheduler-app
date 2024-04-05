@@ -3,6 +3,7 @@ import { css, cx } from "@emotion/css"
 import type { Employee } from "./EmplyeesListView"
 import { CellItem } from "./CellItem"
 import { useLocalStorage } from "@vueuse/core"
+import { Button } from "./Button"
 
 type GridSize = "s" | "m" | "l"
 
@@ -45,45 +46,50 @@ export const Schedule = defineComponent({
     }
 
     const renderDays = () => {
-      const days = [
-        "ראשון",
-        "שני",
-        "שלישי",
-        "רביעי",
-        "חמישי",
-        "שישי",
-        "שבת",
-      ].reverse()
+      const days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"]
 
-      return days.map((day, dayIndex) => (
-        <div class={column}>
-          <div class={cx(gridCellStyle, css({ borderTop: 0 }))}>
-            <div class={columnTitle}>{day}</div>
-          </div>
-          {[1, 2, 3].map((_, cellIndex) => (
-            <div
-              onClick={() => handleCellClick(dayIndex, cellIndex)}
-              class={gridCellStyle}
-            >
-              {renderCellItems(dayIndex, cellIndex)}
+      return days
+        .map((day, dayIndex) => (
+          <div class={column}>
+            <div class={cx(gridCellStyle, css({ borderTop: 0 }))}>
+              <div class={columnTitle}>{day}</div>
             </div>
-          ))}
-        </div>
-      ))
+            {[1, 2, 3].map((_, cellIndex) => (
+              <div
+                onClick={() => handleCellClick(dayIndex, cellIndex)}
+                class={gridCellStyle}
+              >
+                {renderCellItems(dayIndex, cellIndex)}
+              </div>
+            ))}
+          </div>
+        ))
+        .reverse()
     }
 
     return () => (
-      <div class={props.size === "l" ? gridLargeStyle : gridSmallStyle}>
-        {renderDays()}
-        {props.size === "l" && (
-          <div class={column}>
-            <div class={cx(gridCellStyle, css({ borderTop: 0 }))}>משמרת</div>
-            <div class={gridCellStyle}>בוקר</div>
-            <div class={gridCellStyle}>צהריים</div>
-            <div class={gridCellStyle}>ערב</div>
-          </div>
-        )}
-      </div>
+      <>
+        <div class={props.size === "l" ? gridLargeStyle : gridSmallStyle}>
+          {renderDays()}
+          {props.size === "l" && (
+            <div class={column}>
+              <div class={cx(gridCellStyle, css({ borderTop: 0 }))}>משמרת</div>
+              <div class={gridCellStyle}>בוקר</div>
+              <div class={gridCellStyle}>צהריים</div>
+              <div class={gridCellStyle}>ערב</div>
+            </div>
+          )}
+        </div>
+        <div style={{ marginTop: "1rem" }}>
+          <Button
+            onClick={() => {
+              cellEmployeeMap.value.clear()
+            }}
+          >
+            נקה לוח
+          </Button>
+        </div>
+      </>
     )
   },
 })
