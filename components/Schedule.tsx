@@ -48,7 +48,7 @@ export const Schedule = defineComponent({
 
       return days
         .map((day, dayIndex) => (
-          <div class={column}>
+          <div class={column(props.size)}>
             <div class={cx(gridCellStyle, css({ borderTop: 0 }))}>
               <div class={columnTitle}>{day}</div>
             </div>
@@ -67,10 +67,10 @@ export const Schedule = defineComponent({
 
     return () => (
       <>
-        <div class={props.size === "l" ? gridLargeStyle : gridSmallStyle}>
+        <div class={gridStyle(props.size)}>
           {renderDays()}
           {props.size === "l" && (
-            <div class={column}>
+            <div class={column(props.size)}>
               <div class={cx(gridCellStyle, css({ borderTop: 0 }))}>משמרת</div>
               <div class={gridCellStyle}>בוקר</div>
               <div class={gridCellStyle}>צהריים</div>
@@ -92,47 +92,45 @@ export const Schedule = defineComponent({
   },
 })
 
-const gridBaseStyle = css({
-  gap: "1px",
-  boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.3)",
-  borderRadius: "1rem",
-  marginTop: "1rem",
-  display: "grid",
-  "& > div:first-child": {
-    borderTopLeftRadius: "1rem",
-    borderBottomLeftRadius: "1rem",
-  },
-  "& > div:nth-last-child(1)": {
-    borderTopRightRadius: "1rem",
-    borderBottomRightRadius: "1rem",
-  },
-})
-
-const gridLargeStyle = cx(
-  gridBaseStyle,
+const gridStyle = (size: GridSize) =>
   css({
-    width: "95%",
-    gridTemplateColumns: "repeat(8, 1fr)",
-  })
-)
+    gap: "1px",
+    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.3)",
+    borderRadius: "1rem",
+    marginTop: "1rem",
+    display: "grid",
 
-const gridSmallStyle = cx(
-  gridBaseStyle,
-  css({
-    gridTemplateColumns: "repeat(7, minmax(3rem, 1fr))",
+    "& > div:first-child": {
+      borderTopLeftRadius: "1rem",
+      borderBottomLeftRadius: "1rem",
+    },
+    "& > div:nth-last-child(1)": {
+      borderTopRightRadius: "1rem",
+      borderBottomRightRadius: "1rem",
+    },
+
+    ...(size === "l"
+      ? {
+          width: "95%",
+          gridTemplateColumns: "repeat(8, 1fr)",
+        }
+      : {
+          gridTemplateColumns: "repeat(7, minmax(3rem, 1fr))",
+        }),
   })
-)
 
 const columnTitle = css({
   marginTop: 0,
 })
 
-const column = css({
-  border: "1px solid black",
-  backgroundColor: "lightsteelblue",
-  padding: "0 10px",
-  textAlign: "center",
-})
+const column = (size: GridSize) =>
+  css({
+    border: "1px solid black",
+    backgroundColor: "lightsteelblue",
+    textAlign: "center",
+
+    ...(size === "l" && { padding: "0 10px" }),
+  })
 
 const gridCellStyle = css({
   height: "2rem",
